@@ -1,0 +1,28 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"esModuleInterop": true,
+		"target": "es2017",
+		"noImplicitAny": true,
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"outDir": "dist",
+		"baseUrl": ".",
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"paths": {
+			"*": [
+				"node_modules/*",
+				"Source/Types/*"
+			]
+		},
+		"plugins": [
+			{
+				"transform": "tst-reflect-transformer"
+			}
+		]
+	},
+	"include": [
+		"Source/**/*"
+	]
+}
