@@ -1,8 +1,9 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { Roll } from "./Roll";
+import AbstractEntity from "../../AbstractEntity";
 
 @Entity()
-export class Dice extends BaseEntity {
+export class Dice extends AbstractEntity {
 	@PrimaryColumn()
 	id: string;
 

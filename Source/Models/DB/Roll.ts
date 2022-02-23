@@ -1,7 +1,8 @@
-import { BaseEntity, Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { PartyMember } from "./PartyMember";
 import { User } from "./User";
 import { Dice } from "./Dice";
+import AbstractEntity from "../../AbstractEntity";
 
 export enum Ability {
 	None = "N/A",
@@ -36,7 +37,7 @@ export enum Skill {
 }
 
 @Entity()
-export class Roll extends BaseEntity {
+export class Roll extends AbstractEntity {
 	@PrimaryColumn()
 	id: string;
 

@@ -52,6 +52,8 @@ createConnection(opt)
 // Express configuration
 app.set("port", argv.port);
 
+app.use(express.json());
+
 // Check for secret before access
 app.use(HasValidSecret);
 

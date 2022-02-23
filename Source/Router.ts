@@ -6,4 +6,5 @@ export const router = Router();
 router.get("/", controller.index);
 
 // User
-router.get("/user/create", controller.createUser);
+router.get("/user", controller.GetUser);
+router.post("/user/create", controller.CreateUser);

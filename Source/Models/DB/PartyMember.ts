@@ -1,18 +1,16 @@
 import { Roll } from './Roll';
-import { BaseEntity, Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { User } from "./User";
+import AbstractEntity from "../../AbstractEntity";
 
 @Entity()
-export class PartyMember extends BaseEntity {
+export class PartyMember extends AbstractEntity {
 	@PrimaryColumn()
-	id: string;
+	@Index()
+	id: string; // ActorId, Foundry Binding
 
 	@Column()
 	created: number;
-
-	@Column()
-	@Index()
-	actorId: string;
 
 	@Column()
 	name: string;
