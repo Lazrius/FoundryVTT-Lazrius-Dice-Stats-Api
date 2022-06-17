@@ -1,10 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Roll } from "./Roll";
 
 @Entity()
 export class Dice {
-	@PrimaryColumn()
-	id: string;
+	@PrimaryGeneratedColumn()
+	id: number;
 
 	@Column()
 	diceNumber: number;

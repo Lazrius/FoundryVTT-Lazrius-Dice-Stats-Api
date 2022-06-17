@@ -16,7 +16,7 @@ module.exports = {
 	},
 
 	"rules": {
-		"max-len": ["warn", { "code": 120 }],
+		"max-len": ["warn", { "code": 130 }],
 		"comma-dangle": ["error", "always-multiline"],
 		"@typescript-eslint/semi": ["error"],
 		"object-curly-spacing": ["error", "always"],

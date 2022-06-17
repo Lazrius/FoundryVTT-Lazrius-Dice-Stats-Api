@@ -36,5 +36,5 @@ export class Roll {
 	user: User;
 
 	@OneToMany(() => Dice, dice => dice.roll)
-	dice: Promise<Dice>;
+	dice: Promise<Dice[]>;
 }

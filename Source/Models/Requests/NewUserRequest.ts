@@ -1,4 +1,11 @@
-export default interface NewUserRequest {
-	name: string,
-	userId: string
+import { IsNotEmpty, IsString } from "class-validator";
+
+export default class NewUserRequest {
+	@IsString()
+	@IsNotEmpty()
+	name: string;
+
+	@IsString()
+	@IsNotEmpty()
+	userId: string;
 }

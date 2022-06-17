@@ -1,5 +1,5 @@
 import { Roll } from './Roll';
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Session {
@@ -9,7 +9,7 @@ export class Session {
 	@Column()
 	started: number;
 
-	@Column()
+	@Column({ nullable: true })
 	finished: number;
 
 	@OneToMany(() => Roll, roll => roll.session)

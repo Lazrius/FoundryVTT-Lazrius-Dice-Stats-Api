@@ -6,15 +6,10 @@ import { User } from "../Models/DB/User";
 import source from "../App";
 
 export const CreateUser = async (req: Request, res: Response): Promise<void> => {
-	const body = req.body as NewUserRequest;
+	const body = res.locals.obj as NewUserRequest;
 	let user = await FindUserById(body.userId);
 	if (user) {
 		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "User already exists." });
-		return;
-	}
-
-	if (body.name.length === 0 || body.userId.length === 0) {
-		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "Name or id was invalid." });
 		return;
 	}
 
