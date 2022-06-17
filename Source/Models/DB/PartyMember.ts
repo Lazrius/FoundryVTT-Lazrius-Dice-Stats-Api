@@ -1,10 +1,9 @@
 import { Roll } from './Roll';
-import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { User } from "./User";
-import AbstractEntity from "../../AbstractEntity";
 
 @Entity()
-export class PartyMember extends AbstractEntity {
+export class PartyMember {
 	@PrimaryColumn()
 	@Index()
 	id: string; // ActorId, Foundry Binding
@@ -19,5 +18,5 @@ export class PartyMember extends AbstractEntity {
 	owner: User;
 
 	@OneToMany(() => Roll, dice => dice.partyMember)
-	rolls: Roll[];
+	rolls: Promise<Roll[]>;
 }

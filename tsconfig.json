@@ -15,12 +15,10 @@
 				"node_modules/*",
 				"Source/Types/*"
 			]
-		},
-		"plugins": [
-			{
-				"transform": "tst-reflect-transformer"
-			}
-		]
+		}
+	},
+	"ts-node": {
+		"compiler": "ttypescript"
 	},
 	"include": [
 		"Source/**/*"

@@ -1,5 +1,9 @@
 {
+	"signal": "SIGTERM",
 	"env": {
-		"SECRET": ""
-	}
+		"SECRET": "",
+		"NODE_ENV": "development"
+	},
+	"ext": "ts",
+	"exec": "ts-node -- Source/Server.ts"
 }

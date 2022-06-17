@@ -1,13 +1,16 @@
 import { Roll } from './Roll';
-import { Column, Entity, Index, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { PartyMember } from "./PartyMember";
-import AbstractEntity from "../../AbstractEntity";
+import { World } from "./World";
 
 @Entity()
-export class User extends AbstractEntity {
+export class User {
 	@PrimaryColumn()
 	@Index()
 	id: string; // UserId, Foundry Binding
+
+	@Column()
+	isDm: boolean;
 
 	@Column()
 	created: number;
@@ -19,5 +22,8 @@ export class User extends AbstractEntity {
 	partyMembers: PartyMember[];
 
 	@OneToMany(() => Roll, dice => dice.user)
-	allDice: Roll[];
+	rolls: Promise<Roll[]>;
+
+	@ManyToOne(() => World, world => world.users)
+	world: World;
 }
