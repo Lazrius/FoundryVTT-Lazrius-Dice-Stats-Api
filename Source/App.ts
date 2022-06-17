@@ -6,6 +6,12 @@ import { DataSource } from "typeorm";
 import { errorHandler, errorNotFoundHandler } from "./Middleware/ErrorHandler";
 import { router } from "./Router";
 import { HasValidSecret } from "./Middleware/HasValidSecret";
+import { Dice } from "./Models/DB/Dice";
+import { PartyMember } from "./Models/DB/PartyMember";
+import { Roll } from "./Models/DB/Roll";
+import { Session } from "./Models/DB/Session";
+import { User } from "./Models/DB/User";
+import { World } from "./Models/DB/World";
 
 // Database
 
@@ -32,7 +38,7 @@ const source = new DataSource({
 	database: argv.database,
 	synchronize: true,
 	entities: [
-		__dirname + "/Models/DB/*.js",
+		Dice, PartyMember, Roll, Session, User, World,
 	],
 });
 source.initialize()

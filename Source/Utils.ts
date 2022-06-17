@@ -35,5 +35,5 @@ export const FindUserByName = (world: string, name: string): Promise<User> | nul
 export const FindPartyMemberById = (id: string): Promise<PartyMember | null> => source.getRepository(PartyMember)
 	.findOneBy({ id });
 export const GetActiveSession = (): Promise<Session | null> => source.getRepository(Session).createQueryBuilder('session')
-	.where('session.started = NOT NULL AND session.finished = NULL')
+	.where('session.started IS NOT NULL AND session.finished IS NULL')
 	.getOne();
