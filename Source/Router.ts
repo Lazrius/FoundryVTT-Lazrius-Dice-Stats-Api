@@ -13,3 +13,7 @@ router.post("/user/create", controller.CreateUser);
 
 // Rolls
 router.post('/roll/add', TypeValidator(NewRollRequest), controller.NewRoll);
+
+// Session
+router.post('/session/begin', controller.BeginSession);
+router.post('/session/end', controller.EndSession);
