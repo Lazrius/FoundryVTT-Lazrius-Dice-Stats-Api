@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
 
 export default class NewUserRequest {
 	@IsString()
@@ -8,4 +8,7 @@ export default class NewUserRequest {
 	@IsString()
 	@IsNotEmpty()
 	userId: string;
+
+	@IsBoolean()
+	isDm: boolean;
 }
