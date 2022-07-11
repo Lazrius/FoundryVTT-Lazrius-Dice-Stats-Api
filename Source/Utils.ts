@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import HttpStatusCode from "./Models/HttpStatusCode";
 import source from "./App";
 import { World } from "./Models/DB/World";
@@ -26,6 +26,20 @@ export const SendJsonResponse = (res: Response, status: HttpStatusCode, obj: Unk
 export const Timestamp = (): number => ~~(Date.now() / 1000);
 
 export const FromLocal = <T>(res: Response): T => res.locals.obj as T;
+export const GetWorldFromQuery = async (req: Request, res: Response): Promise<World | null> => {
+	if (!req.query.world) {
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "No world id was provided in query." });
+		return null;
+	}
+
+	const world = FindWorldById(req.query.world as string);
+	if (!world) {
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "No valid world was found." });
+		return null;
+	}
+
+	return world;
+};
 
 // Db Queries
 export const FindWorldById = (id: string): Promise<World> | null => source.getRepository(World).findOneBy({ id });

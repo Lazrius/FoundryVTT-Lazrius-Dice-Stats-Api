@@ -1,12 +1,23 @@
 import { Request, Response } from "express";
 import NewUserRequest from "../Models/Requests/NewUserRequest";
-import { FindUserById, FindUserByName, FindWorldById, SendJsonResponse, Timestamp } from "../Utils";
+import {
+	FindUserById,
+	FindUserByName,
+	FromLocal,
+	GetWorldFromQuery,
+	SendJsonResponse,
+	Timestamp,
+} from "../Utils";
 import HttpStatusCode from "../Models/HttpStatusCode";
 import { User } from "../Models/DB/User";
 import source from "../App";
 
 export const CreateUser = async (req: Request, res: Response): Promise<void> => {
-	const body = res.locals.obj as NewUserRequest;
+	const world = await GetWorldFromQuery(req, res);
+	if (!world)
+		return;
+
+	const body = FromLocal<NewUserRequest>(res);
 	let user = await FindUserById(body.userId);
 	if (user) {
 		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "User already exists." });
@@ -17,6 +28,8 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
 	user.id = body.userId;
 	user.name = body.name;
 	user.created = Timestamp();
+	user.isDm = body.isDm;
+	user.world = world;
 
 	await source.getRepository(User).save(user);
 	SendJsonResponse(res, HttpStatusCode.CREATED, JSON.stringify(user));
@@ -24,18 +37,11 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
 
 export const GetUser = async (req: Request, res: Response): Promise<void> => {
 	if (req.query.name) {
-		if (!req.query.world) {
-			SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "No world id was provided in query." });
+		const world = await GetWorldFromQuery(req, res);
+		if (!world)
 			return;
-		}
 
-		const world = await FindWorldById(req.query.world as string);
-		if (!world) {
-			SendJsonResponse(res, HttpStatusCode.NOT_FOUND, { message: "The provided world could not be found." });
-			return;
-		}
-
-		const user = await FindUserByName(req.query.world as string, req.query.name as string);
+		const user = await FindUserByName(world.id as string, req.query.name as string);
 		if (user) {
 			SendJsonResponse(res, HttpStatusCode.FOUND, JSON.stringify(user));
 		} else {
