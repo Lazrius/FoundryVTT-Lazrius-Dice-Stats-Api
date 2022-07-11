@@ -16,6 +16,8 @@ export class World {
 	@Column()
 	system: string;
 
-	@OneToMany(() => User, user => user.world)
+	@OneToMany(() => User, user => user.world, {
+		cascade: true,
+	})
 	users: User[];
 }

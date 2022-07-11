@@ -1,5 +1,5 @@
 import { Roll } from './Roll';
-import { BaseEntity, Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { User } from "./User";
 
 @Entity()
@@ -17,6 +17,8 @@ export class PartyMember {
 	@ManyToOne(() => User, owner => owner.partyMembers)
 	owner: User;
 
-	@OneToMany(() => Roll, dice => dice.partyMember)
+	@OneToMany(() => Roll, dice => dice.partyMember, {
+		cascade: true,
+	})
 	rolls: Promise<Roll[]>;
 }

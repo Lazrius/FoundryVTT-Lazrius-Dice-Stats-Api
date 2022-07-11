@@ -12,6 +12,8 @@ export class Session {
 	@Column({ nullable: true })
 	finished: number;
 
-	@OneToMany(() => Roll, roll => roll.session)
+	@OneToMany(() => Roll, roll => roll.session, {
+		cascade: true,
+	})
 	rolls: Promise<Roll[]>;
 }

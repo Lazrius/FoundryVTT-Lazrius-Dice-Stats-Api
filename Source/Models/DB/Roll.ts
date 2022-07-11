@@ -35,6 +35,8 @@ export class Roll {
 	@ManyToOne(() => User, user => user.rolls)
 	user: User;
 
-	@OneToMany(() => Dice, dice => dice.roll)
+	@OneToMany(() => Dice, dice => dice.roll, {
+		cascade: true,
+	})
 	dice: Promise<Dice[]>;
 }

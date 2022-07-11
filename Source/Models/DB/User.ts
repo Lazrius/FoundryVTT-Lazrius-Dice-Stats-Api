@@ -18,10 +18,14 @@ export class User {
 	@Column()
 	name: string;
 
-	@OneToMany(() => PartyMember, member => member.owner)
+	@OneToMany(() => PartyMember, member => member.owner, {
+		cascade: true,
+	})
 	partyMembers: PartyMember[];
 
-	@OneToMany(() => Roll, dice => dice.user)
+	@OneToMany(() => Roll, dice => dice.user, {
+		cascade: true,
+	})
 	rolls: Promise<Roll[]>;
 
 	@ManyToOne(() => World, world => world.users)
