@@ -20,7 +20,7 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
 	const body = FromLocal<NewUserRequest>(res);
 	let user = await FindUserById(body.userId);
 	if (user) {
-		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "User already exists." });
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, "User already exists.");
 		return;
 	}
 
@@ -32,29 +32,29 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
 	user.world = world;
 
 	await source.getRepository(User).save(user);
-	SendJsonResponse(res, HttpStatusCode.CREATED, JSON.stringify(user));
+	SendJsonResponse(res, HttpStatusCode.CREATED, 'Created User: ' + user.name, user);
 };
 
 export const GetUser = async (req: Request, res: Response): Promise<void> => {
-	if (req.query.name) {
-		const world = await GetWorldFromQuery(req, res);
-		if (!world)
-			return;
+	const world = await GetWorldFromQuery(req, res);
+	if (!world)
+		return;
 
+	if (req.query.name) {
 		const user = await FindUserByName(world.id as string, req.query.name as string);
 		if (user) {
-			SendJsonResponse(res, HttpStatusCode.FOUND, JSON.stringify(user));
+			SendJsonResponse(res, HttpStatusCode.FOUND, 'Found User: ' + user.name, user);
 		} else {
-			SendJsonResponse(res, HttpStatusCode.NOT_FOUND, { message: "Name did not match any known user." });
+			SendJsonResponse(res, HttpStatusCode.NOT_FOUND, "Name did not match any known user.");
 		}
 	} else if (req.query.id) {
 		const user = await FindUserById(req.query.id as string);
 		if (user) {
-			SendJsonResponse(res, HttpStatusCode.FOUND, JSON.stringify(user));
+			SendJsonResponse(res, HttpStatusCode.FOUND, 'Found User: ' + user.name, user);
 		} else {
-			SendJsonResponse(res, HttpStatusCode.NOT_FOUND, { message: "Id did not match any known user." });
+			SendJsonResponse(res, HttpStatusCode.NOT_FOUND, "Id did not match any known user.");
 		}
 	} else {
-		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "No valid name or id was provided in query." });
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, "No valid name or id was provided in query.");
 	}
 };

@@ -7,7 +7,7 @@ import { Session } from "../Models/DB/Session";
 export const BeginSession = async (req: Request, res: Response): Promise<void> => {
 	let session = await GetActiveSession();
 	if (session) {
-		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: 'A session is already active' });
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, 'A session is already active');
 		return;
 	}
 
@@ -23,7 +23,7 @@ export const BeginSession = async (req: Request, res: Response): Promise<void> =
 export const EndSession = async (req: Request, res: Response): Promise<void> => {
 	const session = await GetActiveSession();
 	if (!session) {
-		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: 'No session is active' });
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, 'No session is active');
 		return;
 	}
 

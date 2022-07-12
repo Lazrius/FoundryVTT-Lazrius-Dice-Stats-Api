@@ -20,7 +20,7 @@ const TypeValidator = (type: any) => (req: Request, res: Response, next: NextFun
 			const iter = (arr: Array<any>) => {
 				for (const errorItem of arr) {
 					if (errorItem.constraints)
-						errorTexts = errorTexts.concat(errorItem.constraints);
+						errorTexts = errorTexts.concat(Object.values(errorItem.constraints));
 					if (errorItem.children) {
 						iter(errorItem.children);
 					}
@@ -29,7 +29,7 @@ const TypeValidator = (type: any) => (req: Request, res: Response, next: NextFun
 
 			iter(err);
 
-			res.status(HttpStatusCode.BAD_REQUEST).send(errorTexts);
+			res.status(HttpStatusCode.BAD_REQUEST).send({ message: 'The request had validation errors.', errors: errorTexts });
 			return;
 		});
 	/*validate(output, {

@@ -7,6 +7,7 @@ import { Session } from "./Models/DB/Session";
 import { PartyMember } from "./Models/DB/PartyMember";
 export type UnknownObject = Record<string, unknown>;
 
+// This is the same mechanic for ID generation that FoundryVTT uses
 export const RandomID = (length = 16): string => {
 	const rnd = () => Math.random().toString(36).substr(2);
 	let id = "";
@@ -15,12 +16,31 @@ export const RandomID = (length = 16): string => {
 	return id.substring(0, length);
 };
 
-export const SendJsonResponse = (res: Response, status: HttpStatusCode, obj: UnknownObject | string): void => {
+export const SendJsonResponse = (res: Response, status: HttpStatusCode, message: string,
+	obj: unknown | null = null): void => {
+
+	// Specify the response as JSON
 	res.setHeader('Content-Type', 'application/json');
-	if (typeof(obj) === 'string')
-		res.status(status).send(obj);
-	else
-		res.status(status).send(JSON.stringify(obj));
+
+	// Place our message inside an object
+	let dest: UnknownObject = { message: message };
+
+	// If another object was passed in, we combine them together
+	if (obj != null) {
+		// Check that what we were given is actually an object
+		if ((!!obj) && (obj.constructor === Object)) {
+			dest = { ...obj as UnknownObject, ...dest };
+		}
+		else if ((!!obj) && (obj.constructor === Array)) {
+			dest = { ...dest, result: obj };
+		}
+		else {
+			// Error if that's not the case
+			throw TypeError("Non-null non-object was sent to SendJsonResponse.");
+		}
+	}
+
+	res.status(status).send(JSON.stringify(dest));
 };
 
 export const Timestamp = (): number => ~~(Date.now() / 1000);
@@ -28,13 +48,13 @@ export const Timestamp = (): number => ~~(Date.now() / 1000);
 export const FromLocal = <T>(res: Response): T => res.locals.obj as T;
 export const GetWorldFromQuery = async (req: Request, res: Response): Promise<World | null> => {
 	if (!req.query.world) {
-		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "No world id was provided in query." });
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, "No world id was provided in query.");
 		return null;
 	}
 
-	const world = FindWorldById(req.query.world as string);
+	const world = await FindWorldById(req.query.world as string);
 	if (!world) {
-		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, { message: "No valid world was found." });
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, "No valid world was found.");
 		return null;
 	}
 
