@@ -28,11 +28,10 @@ export const NewRoll = async (req: Request, res: Response): Promise<void> => {
 	}
 
 	const roll = new Roll();
-	roll.ability = body.ability;
+	roll.flavour = body.flavour;
 	roll.created = Timestamp();
 	roll.id = body.id;
 	roll.result = body.total;
-	roll.skill = body.skill;
 	roll.formula = body.formula;
 	roll.user = user;
 	roll.session = Promise.resolve(session);

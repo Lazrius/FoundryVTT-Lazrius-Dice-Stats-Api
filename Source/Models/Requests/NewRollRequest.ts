@@ -30,10 +30,5 @@ export default class NewRollRequest {
 	@IsOptional()
 	@IsString()
 	@IsNotEmpty()
-	skill: string | undefined;
-
-	@IsOptional()
-	@IsString()
-	@IsNotEmpty()
-	ability: string | undefined;
+	flavour: string | undefined;
 }

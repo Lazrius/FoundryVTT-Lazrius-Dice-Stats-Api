@@ -14,11 +14,7 @@ export class Roll {
 
 	@Index()
 	@Column()
-	ability: string;
-
-	@Index()
-	@Column()
-	skill: string;
+	flavour: string;
 
 	@Column()
 	formula: string;
