@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
 
 export class NewPartyMemberRequest {
 	@IsString()
@@ -12,4 +12,7 @@ export class NewPartyMemberRequest {
 	@IsString()
 	@IsNotEmpty()
 	userId: string;
+
+	@IsBoolean()
+	alive: boolean;
 }

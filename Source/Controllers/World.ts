@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { FindWorldById, FromLocal, SendJsonResponse, Timestamp } from "../Utils";
+import { FindWorldById, FromLocal, SendJsonResponse, SendJsonResponseT, Timestamp } from "../Utils";
 import HttpStatusCode from "../Models/HttpStatusCode";
 import source from "../App";
 import NewWorldRequest from "../Models/Requests/NewWorldRequest";
 import { World } from "../Models/DB/World";
 import RenameWorldRequest from "../Models/Requests/RenameWorldRequest";
+import { WorldResponse } from "../Models/Responses/WorldResponse";
 
 export const CreateWorld = async (req: Request, res: Response): Promise<void> => {
 	const body = FromLocal<NewWorldRequest>(res);
@@ -23,7 +24,12 @@ export const CreateWorld = async (req: Request, res: Response): Promise<void> =>
 	world.id = body.worldId;
 
 	await source.getRepository(World).save(world);
-	SendJsonResponse(res, HttpStatusCode.CREATED, 'World Created: ' + world.name, world);
+	SendJsonResponseT<WorldResponse>(res, HttpStatusCode.CREATED, 'World Created: ' + world.name, {
+		id: world.id,
+		created: world.created,
+		system: world.system,
+		name: world.name,
+	});
 };
 
 export const RenameWorld = async (req: Request, res: Response): Promise<void> => {

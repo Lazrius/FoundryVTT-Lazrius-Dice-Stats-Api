@@ -21,4 +21,7 @@ export class PartyMember {
 		cascade: true,
 	})
 	rolls: Promise<Roll[]>;
+
+	@Column()
+	alive: boolean;
 }

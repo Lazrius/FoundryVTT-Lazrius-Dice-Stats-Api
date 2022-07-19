@@ -5,12 +5,15 @@ import {
 	FindUserByName,
 	FromLocal,
 	GetWorldFromQuery,
-	SendJsonResponse,
+	SendJsonResponse, SendJsonResponseT,
 	Timestamp,
 } from "../Utils";
 import HttpStatusCode from "../Models/HttpStatusCode";
 import { User } from "../Models/DB/User";
 import source from "../App";
+import { UserResponse } from "../Models/Responses/UserResponse";
+import { PartyMemberResponse } from "../Models/Responses/PartyMemberResponse";
+import { World } from "../Models/DB/World";
 
 export const CreateUser = async (req: Request, res: Response): Promise<void> => {
 	const world = await GetWorldFromQuery(req, res);
@@ -32,7 +35,7 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
 	user.world = world;
 
 	await source.getRepository(User).save(user);
-	SendJsonResponse(res, HttpStatusCode.CREATED, 'Created User: ' + user.name, user);
+	SendJsonResponseT<UserResponse>(res, HttpStatusCode.CREATED, 'Created User: ' + user.name, GetResponse(world, user));
 };
 
 export const GetUser = async (req: Request, res: Response): Promise<void> => {
@@ -43,14 +46,14 @@ export const GetUser = async (req: Request, res: Response): Promise<void> => {
 	if (req.query.name) {
 		const user = await FindUserByName(world.id as string, req.query.name as string);
 		if (user) {
-			SendJsonResponse(res, HttpStatusCode.FOUND, 'Found User: ' + user.name, user);
+			SendJsonResponseT<UserResponse>(res, HttpStatusCode.FOUND, 'Found User: ' + user.name, GetResponse(world, user));
 		} else {
 			SendJsonResponse(res, HttpStatusCode.NOT_FOUND, "Name did not match any known user.");
 		}
 	} else if (req.query.id) {
 		const user = await FindUserById(req.query.id as string);
 		if (user) {
-			SendJsonResponse(res, HttpStatusCode.FOUND, 'Found User: ' + user.name, user);
+			SendJsonResponseT<UserResponse>(res, HttpStatusCode.FOUND, 'Found User: ' + user.name, GetResponse(world, user));
 		} else {
 			SendJsonResponse(res, HttpStatusCode.NOT_FOUND, "Id did not match any known user.");
 		}
@@ -58,3 +61,17 @@ export const GetUser = async (req: Request, res: Response): Promise<void> => {
 		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, "No valid name or id was provided in query.");
 	}
 };
+
+const GetResponse = (world: World, user: User): UserResponse => ({
+	id: user.id,
+	name: user.name,
+	created: user.created,
+	isDm: user.isDm,
+	world: {
+		id: world.id,
+		created: world.created,
+		name: world.name,
+		system: world.system,
+	},
+	partyMembers: [] as PartyMemberResponse[],
+});

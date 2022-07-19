@@ -53,5 +53,5 @@ export const NewRoll = async (req: Request, res: Response): Promise<void> => {
 	roll.dice = Promise.resolve(arr);
 
 	await source.getRepository(Roll).save(roll);
-	SendJsonResponse(res, HttpStatusCode.CREATED, 'Roll Saved!', roll);
+	SendJsonResponse(res, HttpStatusCode.CREATED, 'Roll Saved!');
 };

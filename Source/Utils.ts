@@ -16,8 +16,13 @@ export const RandomID = (length = 16): string => {
 	return id.substring(0, length);
 };
 
-export const SendJsonResponse = (res: Response, status: HttpStatusCode, message: string,
-	obj: unknown | null = null): void => {
+export const SendJsonResponse = (res: Response, status: HttpStatusCode, message: string): void =>
+	SendJsonResponseInternal(res, status, message, null);
+export const SendJsonResponseT = <T>(res: Response, status: HttpStatusCode, message: string, obj: T): void =>
+	SendJsonResponseInternal(res, status, message, obj);
+
+const SendJsonResponseInternal = (res: Response, status: HttpStatusCode, message: string,
+	obj: unknown | null): void => {
 
 	// Specify the response as JSON
 	res.setHeader('Content-Type', 'application/json');

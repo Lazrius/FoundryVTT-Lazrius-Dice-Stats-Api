@@ -5,7 +5,7 @@ import {
 	GetAllPartyMembersInWorld,
 	GetPartyMemberById,
 	GetWorldFromQuery,
-	SendJsonResponse,
+	SendJsonResponse, SendJsonResponseT,
 	Timestamp,
 } from "../Utils";
 import HttpStatusCode from "../Models/HttpStatusCode";
@@ -13,6 +13,8 @@ import { Request, Response } from "express";
 import { NewPartyMemberRequest } from "../Models/Requests/NewPartyMemberRequest";
 import { PartyMember } from "../Models/DB/PartyMember";
 import source from "../App";
+import { AllPartyMembersResponse, SimplePartyMember } from "../Models/Responses/AllPartyMembersResponse";
+import { PartyMemberResponse } from "../Models/Responses/PartyMemberResponse";
 
 export const NewPartyMember = async (req: Request, res: Response): Promise<void> => {
 	const body = FromLocal<NewPartyMemberRequest>(res);
@@ -55,7 +57,25 @@ export const GetPartyMember = async (req: Request, res: Response): Promise<void>
 		return;
 	}
 
-	SendJsonResponse(res, HttpStatusCode.OK, 'Member found', member);
+	SendJsonResponseT<PartyMemberResponse>(res, HttpStatusCode.OK, 'Member found', {
+		created: member.created,
+		owner: {
+			partyMembers: [],
+			id: member.owner.id,
+			isDm: member.owner.isDm,
+			name: member.owner.name,
+			created: member.owner.created,
+			world: {
+				id: world.id,
+				name: world.name,
+				system: world.system,
+				created: world.created,
+			},
+		},
+		id: member.id,
+		alive: member.alive,
+		name: member.name,
+	});
 };
 
 export const GetAllPartyMembers = async (req: Request, res: Response): Promise<void> => {
@@ -71,5 +91,16 @@ export const GetAllPartyMembers = async (req: Request, res: Response): Promise<v
 		return;
 	}
 
-	SendJsonResponse(res, HttpStatusCode.OK, `Got all (${partyMembers.length}) party members.`, { members: partyMembers });
+	SendJsonResponseT<AllPartyMembersResponse>(res, HttpStatusCode.OK, `Got all (${partyMembers.length}) party members.`,
+		{
+			members: partyMembers.map(x => GetResponse(x)),
+		});
 };
+
+const GetResponse = (member: PartyMember): SimplePartyMember => ({
+	id: member.id,
+	userId: member.owner.id,
+	name: member.name,
+	alive: member.alive,
+	created: member.created,
+});
