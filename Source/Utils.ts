@@ -71,3 +71,12 @@ export const FindPartyMemberById = (id: string): Promise<PartyMember | null> => 
 export const GetActiveSession = (): Promise<Session | null> => source.getRepository(Session).createQueryBuilder('session')
 	.where('session.started IS NOT NULL AND session.finished IS NULL')
 	.getOne();
+export const GetPartyMemberById = (id: string): Promise<PartyMember> => source.getRepository(PartyMember)
+	.findOneBy({ id });
+export const GetAllPartyMembersInWorld = (world: string): Promise<PartyMember[]> => source.getRepository(PartyMember)
+	.createQueryBuilder('member')
+	.innerJoin('member.user', 'user')
+	.innerJoin('user.world', 'world')
+	.where('world.id = :id', { id: world })
+	.getMany();
+
