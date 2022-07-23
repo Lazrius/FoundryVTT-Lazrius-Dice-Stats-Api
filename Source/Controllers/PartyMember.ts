@@ -8,13 +8,12 @@ import {
 	SendJsonResponse, SendJsonResponseT,
 	Timestamp,
 } from "../Utils";
-import HttpStatusCode from "../Models/HttpStatusCode";
 import { Request, Response } from "express";
 import { NewPartyMemberRequest } from "../Models/Requests/NewPartyMemberRequest";
 import { PartyMember } from "../Models/DB/PartyMember";
 import source from "../App";
-import { AllPartyMembersResponse, SimplePartyMember } from "../Models/Responses/AllPartyMembersResponse";
-import { PartyMemberResponse } from "../Models/Responses/PartyMemberResponse";
+import HttpStatusCode from "../Models/HttpStatusCode";
+import { AllPartyMembersResponse, PartyMemberResponse, SimplePartyMember } from "../Models/Responses";
 
 export const NewPartyMember = async (req: Request, res: Response): Promise<void> => {
 	const body = FromLocal<NewPartyMemberRequest>(res);

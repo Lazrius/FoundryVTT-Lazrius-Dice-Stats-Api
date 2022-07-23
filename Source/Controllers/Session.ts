@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
 import { GetActiveSession, SendJsonResponse, SendJsonResponseT, Timestamp } from "../Utils";
-import HttpStatusCode from "../Models/HttpStatusCode";
 import source from "../App";
 import { Session } from "../Models/DB/Session";
-import { SessionEnded } from "../Models/Responses/SessionEnded";
-import { SessionStarted } from "../Models/Responses/SessionStarted";
+import HttpStatusCode from "../Models/HttpStatusCode";
+import { SessionEnded, SessionStarted } from "../Models/Responses";
 
 export const BeginSession = async (req: Request, res: Response): Promise<void> => {
 	let session = await GetActiveSession();

@@ -8,12 +8,11 @@ import {
 	SendJsonResponse, SendJsonResponseT,
 	Timestamp,
 } from "../Utils";
-import HttpStatusCode from "../Models/HttpStatusCode";
 import { User } from "../Models/DB/User";
 import source from "../App";
-import { UserResponse } from "../Models/Responses/UserResponse";
-import { PartyMemberResponse } from "../Models/Responses/PartyMemberResponse";
 import { World } from "../Models/DB/World";
+import HttpStatusCode from "../Models/HttpStatusCode";
+import { PartyMemberResponse, UserResponse } from "../Models/Responses";
 
 export const CreateUser = async (req: Request, res: Response): Promise<void> => {
 	const world = await GetWorldFromQuery(req, res);

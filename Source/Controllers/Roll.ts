@@ -1,10 +1,10 @@
 import { FindPartyMemberById, FindUserById, FromLocal, GetActiveSession, SendJsonResponse, Timestamp } from "../Utils";
-import HttpStatusCode from "../Models/HttpStatusCode";
 import { Request, Response } from "express";
 import NewRollRequest from "../Models/Requests/NewRollRequest";
 import { Roll } from "../Models/DB/Roll";
 import source from "../App";
 import { Dice } from "../Models/DB/Dice";
+import HttpStatusCode from "../Models/HttpStatusCode";
 
 export const NewRoll = async (req: Request, res: Response): Promise<void> => {
 	const body = FromLocal<NewRollRequest>(res);
@@ -37,8 +37,11 @@ export const NewRoll = async (req: Request, res: Response): Promise<void> => {
 	roll.session = Promise.resolve(session);
 	roll.partyMember = partyMember;
 
+	if (roll.flavour === "") {
+		roll.flavour = "N/A";
+	}
 	// dnd5e appends the player name to the flavour text, which makes it a bad index.
-	if (user.world.system == "dnd5e") {
+	else if (user.world.system == "dnd5e") {
 		roll.flavour = roll.flavour.substring(0, roll.flavour.indexOf(':'));
 	}
 

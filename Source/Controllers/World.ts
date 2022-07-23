@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { FindWorldById, FromLocal, SendJsonResponse, SendJsonResponseT, Timestamp } from "../Utils";
-import HttpStatusCode from "../Models/HttpStatusCode";
 import source from "../App";
 import NewWorldRequest from "../Models/Requests/NewWorldRequest";
 import { World } from "../Models/DB/World";
 import RenameWorldRequest from "../Models/Requests/RenameWorldRequest";
-import { WorldResponse } from "../Models/Responses/WorldResponse";
+import HttpStatusCode from "../Models/HttpStatusCode";
+import { WorldResponse } from "../Models/Responses";
 
 export const CreateWorld = async (req: Request, res: Response): Promise<void> => {
 	const body = FromLocal<NewWorldRequest>(res);
