@@ -5,6 +5,7 @@ import { World } from "./Models/DB/World";
 import { User } from "./Models/DB/User";
 import { Session } from "./Models/DB/Session";
 import { PartyMember } from "./Models/DB/PartyMember";
+import moment, { Moment } from "moment";
 export type UnknownObject = Record<string, unknown>;
 
 // This is the same mechanic for ID generation that FoundryVTT uses
@@ -48,7 +49,7 @@ const SendJsonResponseInternal = (res: Response, status: HttpStatusCode, message
 	res.status(status).send(JSON.stringify(dest));
 };
 
-export const Timestamp = (): number => ~~(Date.now() / 1000);
+export const Timestamp = (time: Moment = moment.utc()): number => time.second();
 
 export const FromLocal = <T>(res: Response): T => res.locals.obj as T;
 export const GetWorldFromQuery = async (req: Request, res: Response): Promise<World | null> => {
