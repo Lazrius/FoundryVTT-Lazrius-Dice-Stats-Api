@@ -5,7 +5,8 @@
 	"main": "server.js",
 	"scripts": {
 		"dev": "nodemon",
-		"build": "npx ttsc",
+		"build": "npx tsc",
+		"run": "node dist/Server.js",
 		"faker": "ts-node -- Source/Faker.ts",
 		"migration:generate": "typeorm-ts-node-commonjs migration:generate -d Source/Connection.ts",
 		"migration:up": "typeorm-ts-node-commonjs migration:run -d Source/Connection.ts",
@@ -19,17 +20,17 @@
 		"http-errors": "^1.7.1",
 		"http-status-codes": "^2.2.0",
 		"moment": "^2.29.4",
-		"mssql": "^6.4.1",
+		"mssql": "^7.3.5",
 		"mysql2": "^2.3.3",
 		"pg": "^8.7.3",
-		"typeorm": "^0.3.6",
+		"typeorm": "^0.3.7",
 		"yargs": "^17.3.1"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^7.3.0",
 		"@types/express": "4.17.13",
 		"@types/http-errors": "1.8.2",
-		"@types/node": "14.18.12",
+		"@types/node": "^14.18.12",
 		"@types/validator": "^13.7.4",
 		"@types/yargs": "^17.0.8",
 		"@typescript-eslint/eslint-plugin": "4.33.0",
@@ -43,7 +44,6 @@
 		"nodemon": "2.0.15",
 		"prettier": "2.5.1",
 		"ts-node": "^10.8.1",
-		"ttypescript": "^1.5.13",
 		"typescript": "4.5.5"
 	}
 }

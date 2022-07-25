@@ -17,9 +17,6 @@
 			]
 		}
 	},
-	"ts-node": {
-		"compiler": "ttypescript"
-	},
 	"include": [
 		"Source/**/*"
 	]

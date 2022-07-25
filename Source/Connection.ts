@@ -1,5 +1,4 @@
 import yargs from "yargs";
-import * as path from "path";
 import { DataSource } from "typeorm";
 
 import { Dice } from "./Models/DB/Dice";
