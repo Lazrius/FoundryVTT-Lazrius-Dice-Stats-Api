@@ -41,3 +41,9 @@ If using Docker, you can add `-e COMMAND=update` or `-e COMMAND=revert` to the d
 
 ## Faker
 For debugging and development purposes, there exists a file called `Faker.ts` used for generating debug data. Running `npm run faker` will use the default settings (or any args passed) to connect to the DB, delete any data found there, and then populate it with dummy data
+
+## Database Structure
+The Database structure files can be seen in `Source/Models/DB`.
+
+The current diagram is as follows:
+![data diagram](https://media.discordapp.net/attachments/480531503097577472/1001244527773888582/unknown.png)
