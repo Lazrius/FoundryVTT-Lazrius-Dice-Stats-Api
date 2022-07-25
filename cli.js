@@ -3,7 +3,6 @@ const { hideBin } = require('yargs/helpers')
 const { execSync } = require("child_process");
 
 const argv = yargs(hideBin(process.argv)).argv;
-console.log(__dirname);
 try {
 	switch (argv.cmd) {
 		case "run":
