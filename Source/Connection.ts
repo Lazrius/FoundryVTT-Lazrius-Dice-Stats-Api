@@ -1,11 +1,7 @@
-import express from "express";
 import yargs from "yargs";
 import * as path from "path";
 import { DataSource } from "typeorm";
 
-import { errorHandler, errorNotFoundHandler } from "./Middleware/ErrorHandler";
-import { router } from "./Router";
-import { HasValidSecret } from "./Middleware/HasValidSecret";
 import { Dice } from "./Models/DB/Dice";
 import { PartyMember } from "./Models/DB/PartyMember";
 import { Roll } from "./Models/DB/Roll";
@@ -13,13 +9,10 @@ import { Session } from "./Models/DB/Session";
 import { User } from "./Models/DB/User";
 import { World } from "./Models/DB/World";
 
-// Database
-
-
-export const app = express();
-
-const argv = yargs(process.argv.slice(2)).options({
-	isMaria: { type: 'boolean', default: true },
+export const argv = yargs(process.argv.slice(2)).options({
+	dbType: { type: 'string', default: 'mariadb',
+		choices: [ 'mariadb', 'mysql', 'postgres', 'mssql' ],
+	},
 	port: { type: 'number', default: 3000 },
 	host: { type: 'string', default: "localhost" },
 	dbPort: { type: 'number', default: 3306 },
@@ -30,16 +23,18 @@ const argv = yargs(process.argv.slice(2)).options({
 
 // Create our DB if it doesn't exist
 const source = new DataSource({
-	type: argv.isMaria ? "mariadb" : "mysql",
+	type: argv.dbType as 'mysql' | 'mariadb' | 'postgres' | 'mssql',
 	host: argv.host,
 	port: argv.dbPort,
 	username: argv.username,
 	password: argv.password,
 	database: argv.database,
-	synchronize: true,
+	synchronize: false,
 	entities: [
 		Dice, PartyMember, Roll, Session, User, World,
 	],
+	migrations: [ 'Source/Migrations/**/*.ts' ],
+	migrationsTableName: 'migrations_dice-stats',
 });
 source.initialize()
 	.then(() => console.log("Data source has been initialized."))
@@ -49,18 +44,3 @@ source.initialize()
 	});
 
 export default source;
-
-// Express configuration
-app.set("port", argv.port);
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Check for secret before access
-app.use(HasValidSecret);
-
-app.use(express.static(path.join(__dirname, "../public")));
-app.use("/", router);
-
-app.use(errorNotFoundHandler);
-app.use(errorHandler);

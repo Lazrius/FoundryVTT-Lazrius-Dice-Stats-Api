@@ -11,7 +11,7 @@ import {
 import { Request, Response } from "express";
 import { NewPartyMemberRequest } from "../Models/Requests/NewPartyMemberRequest";
 import { PartyMember } from "../Models/DB/PartyMember";
-import source from "../App";
+import source from "../Connection";
 import HttpStatusCode from "../Models/HttpStatusCode";
 import { AllPartyMembersResponse, PartyMemberResponse, SimplePartyMember } from "../Models/Responses";
 

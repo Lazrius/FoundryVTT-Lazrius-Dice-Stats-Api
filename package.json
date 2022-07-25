@@ -6,7 +6,10 @@
 	"scripts": {
 		"dev": "nodemon",
 		"build": "npx ttsc",
-		"faker": "ts-node -- Source/Faker.ts"
+		"faker": "ts-node -- Source/Faker.ts",
+		"migration:generate": "typeorm-ts-node-commonjs migration:generate -d Source/Connection.ts",
+		"migration:up": "typeorm-ts-node-commonjs migration:run -d Source/Connection.ts",
+		"migration:down": "typeorm-ts-node-commonjs migration:revert -d Source/Connection.ts"
 	},
 	"author": "Lazrius",
 	"license": "GPL-3.0",
@@ -16,7 +19,9 @@
 		"http-errors": "^1.7.1",
 		"http-status-codes": "^2.2.0",
 		"moment": "^2.29.4",
+		"mssql": "^6.4.1",
 		"mysql2": "^2.3.3",
+		"pg": "^8.7.3",
 		"typeorm": "^0.3.6",
 		"yargs": "^17.3.1"
 	},

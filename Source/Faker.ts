@@ -1,7 +1,7 @@
 // File for generating debug development data
 import 'reflect-metadata';
 import { faker } from '@faker-js/faker';
-import source from './App';
+import source from './Connection';
 import { GetActiveSession, RandomID, Timestamp } from "./Utils";
 import moment from "moment";
 import { World } from "./Models/DB/World";

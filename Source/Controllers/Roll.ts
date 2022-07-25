@@ -2,7 +2,7 @@ import { FindPartyMemberById, FindUserById, FromLocal, GetActiveSession, SendJso
 import { Request, Response } from "express";
 import NewRollRequest from "../Models/Requests/NewRollRequest";
 import { Roll } from "../Models/DB/Roll";
-import source from "../App";
+import source from "../Connection";
 import { Dice } from "../Models/DB/Dice";
 import HttpStatusCode from "../Models/HttpStatusCode";
 

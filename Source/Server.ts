@@ -1,7 +1,29 @@
+import express from 'express';
 import 'reflect-metadata';
-import { app } from "./App";
+import { HasValidSecret } from "./Middleware/HasValidSecret";
+import path from "path";
+import { router } from "./Router";
+import { errorHandler, errorNotFoundHandler } from "./Middleware/ErrorHandler";
+import { argv } from "./Connection";
+
+const app = express();
 
 const port = app.get("port");
+
+// Express configuration
+app.set("port", argv.port);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Check for secret before access
+app.use(HasValidSecret);
+
+app.use(express.static(path.join(__dirname, "../public")));
+app.use("/", router);
+
+app.use(errorNotFoundHandler);
+app.use(errorHandler);
 
 const server = app.listen(port, onListening);
 server.on("error", onError);

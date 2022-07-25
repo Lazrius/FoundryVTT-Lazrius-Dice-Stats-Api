@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { GetActiveSession, SendJsonResponse, SendJsonResponseT, Timestamp } from "../Utils";
-import source from "../App";
+import source from "../Connection";
 import { Session } from "../Models/DB/Session";
 import HttpStatusCode from "../Models/HttpStatusCode";
 import { SessionEnded, SessionStarted } from "../Models/Responses";

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import HttpStatusCode from "./Models/HttpStatusCode";
-import source from "./App";
+import source from "./Connection";
 import { World } from "./Models/DB/World";
 import { User } from "./Models/DB/User";
 import { Session } from "./Models/DB/Session";

@@ -9,7 +9,7 @@ import {
 	Timestamp,
 } from "../Utils";
 import { User } from "../Models/DB/User";
-import source from "../App";
+import source from "../Connection";
 import { World } from "../Models/DB/World";
 import HttpStatusCode from "../Models/HttpStatusCode";
 import { PartyMemberResponse, UserResponse } from "../Models/Responses";

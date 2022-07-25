@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { FindWorldById, FromLocal, SendJsonResponse, SendJsonResponseT, Timestamp } from "../Utils";
-import source from "../App";
+import source from "../Connection";
 import NewWorldRequest from "../Models/Requests/NewWorldRequest";
 import { World } from "../Models/DB/World";
 import RenameWorldRequest from "../Models/Requests/RenameWorldRequest";
