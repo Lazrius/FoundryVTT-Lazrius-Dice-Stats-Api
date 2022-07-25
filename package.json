@@ -1,5 +1,5 @@
 {
-	"name": "lazrius-dice-stats-backend",
+	"name": "lazrius-dice-stats-api",
 	"version": "1.0.0",
 	"description": "Backend for FoundryVTT Dice Stats Module",
 	"main": "server.js",
