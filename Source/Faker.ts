@@ -19,7 +19,7 @@ const log = console.log;
 const Rand = (total: number) => Math.floor(Math.random() * total);
 
 const Generate = async () => {
-	let currentStartDate = moment.utc().second();
+	let currentStartDate = moment().unix();
 	let currentEndDate = 0;
 
 	const NewUser = async (world: World, isDm = false) => {
@@ -86,7 +86,6 @@ const Generate = async () => {
 		let session = await GetActiveSession();
 		if (rollCount === 0) {
 			// Begin Session
-			log(chalk.redBright('New Session'));
 			currentStartDate = moment.unix(currentStartDate).add(7, 'days').seconds();
 			currentEndDate = moment.unix(currentStartDate).add(6, 'hour').seconds();
 
@@ -107,7 +106,6 @@ const Generate = async () => {
 			dice.diceNumber = 20;
 			dice.roll = roll;
 			roll.dice = Promise.resolve([dice]);
-			log(chalk.white('Single Dice Roll'));
 		} else {
 			roll.flavour = "N/A";
 			const diceCount = (Rand(4) + 1);
@@ -120,7 +118,6 @@ const Generate = async () => {
 				dice.roll = roll;
 				return dice;
 			}));
-			log(chalk.white('Multi-Dice Roll'));
 		}
 
 		roll.partyMember = member;
@@ -136,7 +133,6 @@ const Generate = async () => {
 
 		rollCount++;
 		if (rollCount === 100) {
-			log(chalk.redBright('End Session'));
 			session.finished = currentEndDate;
 			await source.getRepository(Session).save(session);
 			rollCount = 0;
@@ -167,6 +163,7 @@ const Generate = async () => {
 
 		// 100 sessions
 		for (let i = 0; i < 100; i++) {
+			log(chalk.blue(`Generating Session ${i + 1} of 100`));
 			// 100 rolls per session
 			for (let j = 0; j < 100; j++) {
 				await NewRoll(members[Rand(members.length)]);
@@ -177,6 +174,7 @@ const Generate = async () => {
 
 	// Generate 5 worlds
 	for (let i = 0; i < 5; i++) {
+		log(chalk.blue(`Generating World ${i + 1} of 5`));
 		await GenerateData();
 	}
 };
@@ -191,4 +189,5 @@ const Generate = async () => {
 
 	// Generate new data
 	await Generate();
+	process.exit(0);
 })();

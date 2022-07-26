@@ -49,7 +49,7 @@ const SendJsonResponseInternal = (res: Response, status: HttpStatusCode, message
 	res.status(status).send(JSON.stringify(dest));
 };
 
-export const Timestamp = (time: Moment = moment.utc()): number => time.second();
+export const Timestamp = (): number => moment().unix();
 
 export const FromLocal = <T>(res: Response): T => res.locals.obj as T;
 export const GetWorldFromQuery = async (req: Request, res: Response): Promise<World | null> => {
