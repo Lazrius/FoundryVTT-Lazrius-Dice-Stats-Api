@@ -5,14 +5,16 @@ import path from "path";
 import { router } from "./Router";
 import { errorHandler, errorNotFoundHandler } from "./Middleware/ErrorHandler";
 import { argv } from "./Connection";
+import cors from 'cors';
 
 const app = express();
-
-const port = app.get("port");
 
 // Express configuration
 app.set("port", argv.port);
 
+const port = app.get("port");
+
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
