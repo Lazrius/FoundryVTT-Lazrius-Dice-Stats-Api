@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 export const HasValidSecret = (req: Request, res: Response, next: NextFunction): void => {
-	const secret = process.env.SECRET || "";
+	const secret = process.env.secret || "";
 	if (secret.length === 0) {
 		next();
 		return;

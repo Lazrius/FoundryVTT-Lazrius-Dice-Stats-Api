@@ -33,14 +33,34 @@ docker build . -t lazrius-dice-stats-api:latest
 docker run --name dice-stats-api -d lazrius-dice-stats-api
 ```
 
+## Environment Variables
+The following environment variables are available: (values in parentheses are defaults)
+- dbType (mariadb)
+- port (3000)
+- host (localhost)
+- dbPort (3306)
+- username (root)
+- password
+- database (dice-stats)
+- secret
+
+If using Docker, the above variables are converted into screaming snake case to match Docker standards.
+E.g. secret becomes SECRET and dbPort becomes DB_PORT. 
+
 ## Updating
-When updating from a previous version of the API, there may be changes to the database schema. Migrations have been setup for this, and you can automatically make the needed changes using the NPM run commands.
-`npm run migration:up` will execute the change to the database, using the standard configuration from `Source/Connection.ts`. This can be reverted if need be by passing in `migration:down` instead. 
+When updating from a previous version of the API, there may be changes to the database schema. Migrations have been setup for this, and you can automatically make the needed 
+changes using the NPM run commands.
+`npm run migration:up` will execute the change to the database, using the standard configuration from `Source/Connection.ts`. 
+This can be reverted if need be by passing in `migration:down` instead. 
 
 If using Docker, you can add `-e COMMAND=update` or `-e COMMAND=revert` to the docker run command in order to execute it via your container setup.
 
 ## Faker
 For debugging and development purposes, there exists a file called `Faker.ts` used for generating debug data. Running `npm run faker` will use the default settings (or any args passed) to connect to the DB, delete any data found there, and then populate it with dummy data
+
+## Securing The Api
+To prevent edits being made by anyone, there exists a 'secret key' that can be set by the operator of the API. By setting this key via environment variable (see above) 
+all requests being sent to the API must add the key with an x-api-key header. When using the FoundryVTT module, this is set in the module configuration.
 
 ## Database Structure
 The Database structure files can be seen in `Source/Models/DB`.
