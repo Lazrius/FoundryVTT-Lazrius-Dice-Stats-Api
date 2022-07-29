@@ -35,9 +35,21 @@ export const EndSession = async (req: Request, res: Response): Promise<void> => 
 
 	session = await source.getRepository(Session).save(session);
 
-	SendJsonResponseT<SessionEnded>(res, HttpStatusCode.CREATED, 'Session ended.', {
+	SendJsonResponseT<SessionEnded>(res, HttpStatusCode.OK, 'Session ended.', {
 		id: session.id,
 		started: session.started,
 		finished: session.finished,
 	});
+};
+
+export const GetCurrentSession = async (req: Request, res: Response): Promise<void> => {
+	const session = await GetActiveSession();
+	if (!session) {
+		SendJsonResponse(res, HttpStatusCode.OK, 'No session is active');
+	} else {
+		SendJsonResponseT<SessionEnded>(res, HttpStatusCode.OK, 'Active Session', {
+			id: session.id,
+			started: session.started,
+		});
+	}
 };

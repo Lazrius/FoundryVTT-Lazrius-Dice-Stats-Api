@@ -8,7 +8,7 @@ import { SendJsonResponse } from "./Utils";
 import HttpStatusCode from "./Models/HttpStatusCode";
 import { CreateUser, GetUser } from "./Controllers/User";
 import { NewRoll } from "./Controllers/Roll";
-import { BeginSession, EndSession } from "./Controllers/Session";
+import { BeginSession, EndSession, GetCurrentSession } from "./Controllers/Session";
 import { CreateWorld, RenameWorld } from "./Controllers/World";
 import { GetAllPartyMembers, GetPartyMember, NewPartyMember } from "./Controllers/PartyMember";
 
@@ -26,6 +26,7 @@ router.post("/user/create", TypeValidator(NewUserRequest), CreateUser);
 router.post('/roll/add', TypeValidator(NewRollRequest), NewRoll);
 
 // Session
+router.get('/session', GetCurrentSession);
 router.post('/session/begin', BeginSession);
 router.post('/session/end', EndSession);
 
