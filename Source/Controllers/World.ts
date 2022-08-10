@@ -1,11 +1,24 @@
 import { Request, Response } from "express";
-import { FindWorldById, FromLocal, SendJsonResponse, SendJsonResponseT, Timestamp } from "../Utils";
+import { FindWorldById, FromLocal, GetWorldFromQuery, SendJsonResponse, SendJsonResponseT, Timestamp } from "../Utils";
 import source from "../Connection";
 import NewWorldRequest from "../Models/Requests/NewWorldRequest";
 import { World } from "../Models/DB/World";
-import RenameWorldRequest from "../Models/Requests/RenameWorldRequest";
 import HttpStatusCode from "../Models/HttpStatusCode";
 import { WorldResponse } from "../Models/Responses";
+
+export const GetWorld = async (req: Request, res: Response): Promise<void> => {
+	const world = await GetWorldFromQuery(req, res);
+	if (!world) {
+		return;
+	}
+
+	SendJsonResponseT<WorldResponse>(res, HttpStatusCode.OK, 'World data found', {
+		id: world.id,
+		created: world.created,
+		name: world.name,
+		system: world.system,
+	});
+};
 
 export const CreateWorld = async (req: Request, res: Response): Promise<void> => {
 	const body = FromLocal<NewWorldRequest>(res);
@@ -32,8 +45,8 @@ export const CreateWorld = async (req: Request, res: Response): Promise<void> =>
 	});
 };
 
-export const RenameWorld = async (req: Request, res: Response): Promise<void> => {
-	const body = FromLocal<RenameWorldRequest>(res);
+export const UpdateWorld = async (req: Request, res: Response): Promise<void> => {
+	const body = FromLocal<NewWorldRequest>(res);
 
 	const existingWorld = await FindWorldById(body.worldId);
 	if (!existingWorld) {
@@ -43,9 +56,9 @@ export const RenameWorld = async (req: Request, res: Response): Promise<void> =>
 
 	await source.createQueryBuilder()
 		.update(World)
-		.set({ name: body.newWorldName })
+		.set({ name: body.name, system: body.system })
 		.where("id = :id", { id: existingWorld.id })
 		.execute();
 
-	SendJsonResponse(res, HttpStatusCode.OK, 'Updated Name To ' + body.newWorldName);
+	SendJsonResponse(res, HttpStatusCode.OK, 'Updated World Data');
 };
