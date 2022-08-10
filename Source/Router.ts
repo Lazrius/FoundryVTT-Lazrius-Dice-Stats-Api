@@ -6,7 +6,7 @@ import NewWorldRequest from "./Models/Requests/NewWorldRequest";
 import RenameWorldRequest from "./Models/Requests/RenameWorldRequest";
 import { SendJsonResponse } from "./Utils";
 import HttpStatusCode from "./Models/HttpStatusCode";
-import { CreateUser, GetUser } from "./Controllers/User";
+import { CreateUser, GetAllUsersInWorld, GetUser } from "./Controllers/User";
 import { NewRoll } from "./Controllers/Roll";
 import { BeginSession, EndSession, GetCurrentSession } from "./Controllers/Session";
 import { CreateWorld, RenameWorld } from "./Controllers/World";
@@ -20,6 +20,7 @@ router.get("/", async (req: Request, res: Response): Promise<void> => {
 
 // User
 router.get("/user", GetUser);
+router.get("/user/all", GetAllUsersInWorld);
 router.post("/user/create", TypeValidator(NewUserRequest), CreateUser);
 
 // Rolls

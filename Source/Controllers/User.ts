@@ -5,14 +5,15 @@ import {
 	FindUserByName,
 	FromLocal,
 	GetWorldFromQuery,
-	SendJsonResponse, SendJsonResponseT,
+	SendJsonResponse,
+	SendJsonResponseT,
 	Timestamp,
 } from "../Utils";
 import { User } from "../Models/DB/User";
 import source from "../Connection";
 import { World } from "../Models/DB/World";
 import HttpStatusCode from "../Models/HttpStatusCode";
-import { PartyMemberResponse, UserResponse } from "../Models/Responses";
+import { AllUsersResponse, PartyMemberResponse, UserResponse } from "../Models/Responses";
 
 export const CreateUser = async (req: Request, res: Response): Promise<void> => {
 	const world = await GetWorldFromQuery(req, res);
@@ -59,6 +60,36 @@ export const GetUser = async (req: Request, res: Response): Promise<void> => {
 	} else {
 		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, "No valid name or id was provided in query.");
 	}
+};
+
+export const GetAllUsersInWorld = async (req: Request, res: Response): Promise<void> => {
+	const world = await GetWorldFromQuery(req, res);
+	if (!world)
+		return;
+
+	const users = await source.getRepository(User)
+		.createQueryBuilder('user')
+		.innerJoin('user.world', 'world')
+		.where('world.id = :id', { id: world })
+		.getMany();
+
+	const response: AllUsersResponse = {
+		users: users.map((value) => {
+			return {
+				id: value.id,
+				name: value.name,
+				created: value.created,
+				isDm: value.isDm,
+			};
+		}),
+		world: {
+			id: world.id,
+			created: world.created,
+			name: world.name,
+			system: world.system,
+		},
+	};
+	SendJsonResponseT<AllUsersResponse>(res, HttpStatusCode.OK, `Found ${response.users.length} user(s)`, response);
 };
 
 const GetResponse = (world: World, user: User): UserResponse => ({
