@@ -11,33 +11,39 @@ export const NewRoll = async (req: Request, res: Response): Promise<void> => {
 	const user = await FindUserById(req.query.id as string);
 
 	if (!user) {
-		SendJsonResponse(res, HttpStatusCode.NOT_FOUND, 'Cannot find user');
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, 'Cannot find user');
 		return;
 	}
 
 	const session = await GetActiveSession();
 	if (!session) {
-		SendJsonResponse(res, HttpStatusCode.NOT_FOUND, 'There is currently no active session.');
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, 'There is currently no active session.');
 		return;
 	}
 
 	const partyMember = await FindPartyMemberById(body.partyMember);
 	if (!partyMember) {
-		SendJsonResponse(res, HttpStatusCode.NOT_FOUND, 'Cannot find party member');
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, 'Cannot find party member');
+		return;
+	}
+
+	const rolls = await user.rolls;
+	if (rolls.find(x => x.chatMessageId === body.chatMessageId)) {
+		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, 'This roll has already been registered');
 		return;
 	}
 
 	const roll = new Roll();
+	roll.chatMessageId = body.chatMessageId;
 	roll.flavour = body.flavour;
 	roll.created = Timestamp();
-	roll.id = body.id;
 	roll.result = body.total;
 	roll.formula = body.formula;
 	roll.user = user;
 	roll.session = Promise.resolve(session);
 	roll.partyMember = partyMember;
 
-	if (roll.flavour === "") {
+	if (!roll.flavour) {
 		roll.flavour = "N/A";
 	}
 	// dnd5e appends the player name to the flavour text, which makes it a bad index.

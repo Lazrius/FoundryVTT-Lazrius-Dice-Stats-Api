@@ -121,7 +121,6 @@ const Generate = async () => {
 		}
 
 		roll.partyMember = member;
-		roll.id = RandomID();
 		roll.session = Promise.resolve(session);
 		roll.user = roll.partyMember.owner;
 		roll.created = Timestamp();

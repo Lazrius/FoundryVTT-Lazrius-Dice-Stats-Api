@@ -69,18 +69,14 @@ export const GetAllUsersInWorld = async (req: Request, res: Response): Promise<v
 
 	const users = await source.getRepository(User)
 		.createQueryBuilder('user')
+		.leftJoinAndSelect('user.partyMembers', 'member')
 		.innerJoin('user.world', 'world')
-		.where('world.id = :id', { id: world })
+		.where('world.id = :id', { id: world.id })
 		.getMany();
 
 	const response: AllUsersResponse = {
 		users: users.map((value) => {
-			return {
-				id: value.id,
-				name: value.name,
-				created: value.created,
-				isDm: value.isDm,
-			};
+			return GetResponse(world, value);
 		}),
 		world: {
 			id: world.id,
@@ -103,5 +99,5 @@ const GetResponse = (world: World, user: User): UserResponse => ({
 		name: world.name,
 		system: world.system,
 	},
-	partyMembers: [] as PartyMemberResponse[],
+	partyMembers: user.partyMembers,
 });

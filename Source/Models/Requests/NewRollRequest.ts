@@ -5,10 +5,6 @@ import { Type } from "class-transformer";
 export default class NewRollRequest {
 	@IsString()
 	@IsNotEmpty()
-	id: string;
-
-	@IsString()
-	@IsNotEmpty()
 	formula: string;
 
 	@IsNumber()
@@ -26,6 +22,10 @@ export default class NewRollRequest {
 	@Type(() => NewDiceRequest)
 	@ValidateNested({ each: true })
 	dice: NewDiceRequest[];
+
+	@IsString()
+	@IsNotEmpty()
+	chatMessageId: string;
 
 	@IsOptional()
 	@IsString()

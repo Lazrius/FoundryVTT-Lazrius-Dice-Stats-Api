@@ -10,6 +10,7 @@ import { NewRoll } from "./Controllers/Roll";
 import { BeginSession, EndSession, GetCurrentSession } from "./Controllers/Session";
 import { CreateWorld, GetWorld, UpdateWorld } from "./Controllers/World";
 import { GetAllPartyMembers, GetPartyMember, NewPartyMember } from "./Controllers/PartyMember";
+import { NewPartyMemberRequest } from "./Models/Requests/NewPartyMemberRequest";
 
 export const router = Router();
 
@@ -38,4 +39,4 @@ router.post('/world/update', TypeValidator(NewWorldRequest), UpdateWorld);
 // Party Member
 router.get('/member/', GetPartyMember);
 router.get('/member/all', GetAllPartyMembers);
-router.post('/member/create', NewPartyMember);
+router.post('/member/create', TypeValidator(NewPartyMemberRequest), NewPartyMember);

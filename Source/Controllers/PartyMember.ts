@@ -17,15 +17,22 @@ import { AllPartyMembersResponse, PartyMemberResponse, SimplePartyMember } from 
 
 export const NewPartyMember = async (req: Request, res: Response): Promise<void> => {
 	const body = FromLocal<NewPartyMemberRequest>(res);
-	const user = await FindUserById(req.query.id as string);
+	const user = await FindUserById(body.userId);
 
 	if (!user) {
 		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, 'Cannot find user');
 		return;
 	}
 
-	if (await FindPartyMemberById(body.partyMemberId)) {
-		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, 'Party Member already exists');
+	const member = await FindPartyMemberById(body.partyMemberId);
+
+	// If member already exists, we reassign the user
+	if (member) {
+		member.owner = user;
+		member.name = body.name;
+		await source.getRepository(PartyMember).save(member);
+		SendJsonResponseT<SimplePartyMember>(res, HttpStatusCode.CREATED,
+			'Party Member Reassigned: ' + body.name, GetResponse(member));
 		return;
 	}
 
@@ -34,9 +41,11 @@ export const NewPartyMember = async (req: Request, res: Response): Promise<void>
 	partyMember.created = Timestamp();
 	partyMember.id = body.partyMemberId;
 	partyMember.name = body.name;
+	partyMember.alive = body.alive;
 
 	await source.getRepository(PartyMember).save(partyMember);
-	SendJsonResponse(res, HttpStatusCode.CREATED, 'Party Member Created: ' + body.name);
+	SendJsonResponseT<SimplePartyMember>(res, HttpStatusCode.CREATED,
+		'Party Member Created: ' + body.name, GetResponse(partyMember));
 };
 
 export const GetPartyMember = async (req: Request, res: Response): Promise<void> => {

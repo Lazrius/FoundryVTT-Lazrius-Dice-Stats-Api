@@ -7,6 +7,5 @@ export default class NewDiceRequest {
 	diceNumber: number;
 
 	@IsNumber()
-	@IsIn(AllowedDice)
 	diceOutcome: number;
 }
