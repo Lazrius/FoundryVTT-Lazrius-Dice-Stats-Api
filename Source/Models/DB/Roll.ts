@@ -1,4 +1,4 @@
-import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { PartyMember } from "./PartyMember";
 import { User } from "./User";
 import { Dice } from "./Dice";
@@ -22,7 +22,7 @@ export class Roll {
 	@Column()
 	result: number;
 
-	@Column()
+	@Column({ unique: true })
 	chatMessageId: string;
 
 	@ManyToOne(() => Session, session => session.rolls)

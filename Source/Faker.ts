@@ -120,11 +120,13 @@ const Generate = async () => {
 			}));
 		}
 
+
 		roll.partyMember = member;
 		roll.session = Promise.resolve(session);
 		roll.user = roll.partyMember.owner;
 		roll.created = Timestamp();
 		roll.result = 0;
+		roll.chatMessageId = RandomID();
 		(await roll.dice).forEach(x => {
 			roll.result += x.diceOutcome;
 		});
