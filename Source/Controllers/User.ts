@@ -13,7 +13,7 @@ import { User } from "../Models/DB/User";
 import source from "../Connection";
 import { World } from "../Models/DB/World";
 import HttpStatusCode from "../Models/HttpStatusCode";
-import { AllUsersResponse, PartyMemberResponse, UserResponse } from "../Models/Responses";
+import { AllUsersResponse, UserResponse } from "../Models/Responses";
 
 export const CreateUser = async (req: Request, res: Response): Promise<void> => {
 	const world = await GetWorldFromQuery(req, res);
@@ -88,16 +88,31 @@ export const GetAllUsersInWorld = async (req: Request, res: Response): Promise<v
 	SendJsonResponseT<AllUsersResponse>(res, HttpStatusCode.OK, `Found ${response.users.length} user(s)`, response);
 };
 
-const GetResponse = (world: World, user: User): UserResponse => ({
-	id: user.id,
-	name: user.name,
-	created: user.created,
-	isDm: user.isDm,
-	world: {
-		id: world.id,
-		created: world.created,
-		name: world.name,
-		system: world.system,
-	},
-	partyMembers: user.partyMembers,
-});
+const GetResponse = (world: World, user: User): UserResponse => {
+	const obj: Record<string, unknown> = {
+		id: user.id,
+		name: user.name,
+		created: user.created,
+		isDm: user.isDm,
+		world: {
+			id: world.id,
+			created: world.created,
+			name: world.name,
+			system: world.system,
+		},
+	}
+
+	if (user.partyMembers) {
+		obj.partyMembers = user.partyMembers.map(x => {
+			return {
+				alive: x.alive,
+				created: x.created,
+				id: x.id,
+				name: x.name,
+				owner: null
+			};
+		});
+	}
+
+	return obj as unknown as UserResponse;
+};

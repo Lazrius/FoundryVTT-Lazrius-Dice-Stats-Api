@@ -8,7 +8,7 @@ import HttpStatusCode from "../Models/HttpStatusCode";
 
 export const NewRoll = async (req: Request, res: Response): Promise<void> => {
 	const body = FromLocal<NewRollRequest>(res);
-	const user = await FindUserById(req.query.id as string);
+	const user = await FindUserById(body.user);
 
 	if (!user) {
 		SendJsonResponse(res, HttpStatusCode.BAD_REQUEST, 'Cannot find user');
