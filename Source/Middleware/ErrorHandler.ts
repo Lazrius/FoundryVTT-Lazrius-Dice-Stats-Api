@@ -13,5 +13,6 @@ export const errorHandler = (err: WebError, req: Request, res: Response): void =
 };
 
 export const errorNotFoundHandler = (req: Request, res: Response, next: NextFunction): void => {
+	console.log("NOT FOUND: " + req.originalUrl);
 	next(createError(404));
 };
